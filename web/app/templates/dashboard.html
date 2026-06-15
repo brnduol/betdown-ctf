@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BetDown - Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="casino-theme panel-page">
+  <nav class="topbar">
+    <div class="brand-mini"><span class="logo small">BD</span> BetDown</div>
+    <div>
+      <span class="pill">{{ username }}</span>
+      <span class="pill muted">{{ tipo }}</span>
+      <a class="nav-link" href="{{ url_for('logout') }}">sair</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero panel-hero">
+      <h1>Dashboard BetDown</h1>
+      <p>Resumo promocional da conta, saldo fictício e histórico recente de apostas.</p>
+    </section>
+
+    <section class="account-section">
+      <article class="panel casino-card account-card">
+        <h2>Dados da conta</h2>
+        <div class="status-row">
+          <span>Usuário</span>
+          <strong id="field-username">{{ username }}</strong>
+        </div>
+        <div class="status-row">
+          <span>Tipo</span>
+          <strong id="field-tipo">{{ tipo }}</strong>
+        </div>
+        <div class="status-row">
+          <span>Saldo</span>
+          <strong id="field-saldo">{{ saldo }}</strong>
+        </div>
+        <div class="status-row stacked">
+          <span>Histórico</span>
+          <strong id="field-historico">{{ historico }}</strong>
+        </div>
+
+        <button type="button" id="reloadBtn">Recarregar dados</button>
+      </article>
+    </section>
+
+    {% if tipo == "admin" %}
+      <section class="panel casino-card admin-users">
+        <h2>Usuários cadastrados</h2>
+        <table>
+          <thead id="usersTableHead">
+            <tr>
+              <th>ID</th>
+              <th>Usuário</th>
+              <th>Tipo</th>
+              <th>Saldo</th>
+              <th>Histórico</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            {% for item in users %}
+              <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.username }}</td>
+                <td>{{ item.tipo }}</td>
+                <td>{{ item.saldo }}</td>
+                <td>{{ item.historico }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    {% endif %}
+  </main>
+
+  <script>
+    (function () {
+      const reloadBtn = document.getElementById("reloadBtn");
+      const userId = Number("{{ user_id }}");
+      const defaultColumns = ["id", "username", "tipo", "saldo", "historico"];
+
+      reloadBtn.addEventListener("click", async () => {
+        reloadBtn.disabled = true;
+        reloadBtn.textContent = "RECARREGANDO...";
+
+        const response = await fetch("{{ url_for('api_dashboard') }}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            columns: defaultColumns
+          })
+        });
+
+        const payload = await response.json();
+
+        if (payload.rows && payload.columns) {
+          renderUsersTable(payload.columns, payload.rows);
+
+          const currentUser = payload.rows.find((row) => Number(row.id) === userId) || payload.rows[0];
+          if (currentUser) {
+            document.getElementById("field-username").textContent = currentUser.username || "";
+            document.getElementById("field-tipo").textContent = currentUser.tipo || "";
+            document.getElementById("field-saldo").textContent = currentUser.saldo || "";
+            document.getElementById("field-historico").textContent = currentUser.historico || "";
+          }
+        }
+
+        reloadBtn.disabled = false;
+        reloadBtn.textContent = "Recarregar dados";
+      });
+
+      function renderUsersTable(columns, rows) {
+        const tableHead = document.getElementById("usersTableHead");
+        const tableBody = document.getElementById("usersTableBody");
+
+        if (!tableHead || !tableBody) {
+          return;
+        }
+
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        const headerRow = document.createElement("tr");
+        columns.forEach((column) => {
+          const cell = document.createElement("th");
+          cell.textContent = column;
+          headerRow.appendChild(cell);
+        });
+        tableHead.appendChild(headerRow);
+
+        rows.forEach((row) => {
+          const bodyRow = document.createElement("tr");
+          columns.forEach((column) => {
+            const cell = document.createElement("td");
+            cell.textContent = row[column] || "";
+            bodyRow.appendChild(cell);
+          });
+          tableBody.appendChild(bodyRow);
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

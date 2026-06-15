@@ -1,0 +1,5 @@
+SQLite da aplicação:
+
+- Caminho no container web: /app/betdown.sqlite3
+- A tabela de interesse é users.
+- O usuário root consegue ler o arquivo do banco e consultar a tabela diretamente.

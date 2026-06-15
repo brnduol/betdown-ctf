@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BetDown - Milhoes em Segundos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page casino-theme">
+  <!-- TODO: remover antes do deploy -->
+  <!-- Repositório legado interno: http://localhost:3000/betdown/platform/ -->
+
+  <div class="bg-wallpaper"></div>
+  <div class="bg-overlay"></div>
+  <div class="flash-layer" id="flashLayer"></div>
+  <div class="effects-layer" id="effectsLayer"></div>
+
+  <main class="promo-shell">
+    <p class="promo-kicker">Apenas hoje - premio instantaneo - sem limite de ganhos</p>
+    <h1 class="promo-title">BETDOWN</h1>
+    <p class="promo-subtitle">A roleta dourada que so entrega vitoria.</p>
+
+    <section class="wheel-stage" aria-live="polite">
+      <div class="wheel-wrap" id="wheelWrap">
+        <div class="wheel-pointer"></div>
+        <div class="wheel" id="wheel">
+          <span class="wheel-label label-1">R$ 10.000</span>
+          <span class="wheel-label label-2">R$ 50.000</span>
+          <span class="wheel-label label-3">R$ 100.000</span>
+          <span class="wheel-label label-4">R$ 250.000</span>
+          <span class="wheel-label label-5">JACKPOT</span>
+          <div class="wheel-center">GANHE</div>
+        </div>
+      </div>
+      <button type="button" class="spin-btn" id="spinBtn">GIRAR ROLETA AGORA</button>
+      <p class="winning-line" id="winningLine">Clique para girar. Todo giro termina em premio.</p>
+    </section>
+
+    <div class="cta-strip">
+      <span>Pagamento imediato de premios - Plataforma numero 1 em vencedores</span>
+    </div>
+  </main>
+
+  <section class="prize-modal hidden" id="prizeModal" role="dialog" aria-modal="true" aria-labelledby="prizeTitle">
+    <div class="prize-card">
+      <h2 id="prizeTitle">&#127881; PARABENS! VOCE GANHOU!</h2>
+      <p class="prize-value" id="prizeValue">R$ 100.000</p>
+      <p class="urgency-text">Seu premio expira em <span id="countdown">04:59</span></p>
+      <p class="urgency-text">Apenas hoje</p>
+      <p class="urgency-text">Ultima chance para resgatar</p>
+
+      <form class="fake-form" id="claimForm" action="#" method="post" novalidate>
+        <div class="field-grid">
+          <label>Nome completo
+            <input type="text" placeholder="Seu nome completo" autocomplete="off">
+          </label>
+          <label>CPF
+            <input type="text" placeholder="000.000.000-00" autocomplete="off">
+          </label>
+          <label>Telefone
+            <input type="text" placeholder="(00) 90000-0000" autocomplete="off">
+          </label>
+          <label>E-mail
+            <input type="email" placeholder="voce@exemplo.com" autocomplete="off">
+          </label>
+          <label>Numero do cartao
+            <input type="text" placeholder="0000 0000 0000 0000" autocomplete="off">
+          </label>
+          <label>Nome impresso no cartao
+            <input type="text" placeholder="NOME SOBRENOME" autocomplete="off">
+          </label>
+          <label>Validade
+            <input type="text" placeholder="MM/AA" autocomplete="off">
+          </label>
+          <label>CVV
+            <input type="text" placeholder="000" autocomplete="off">
+          </label>
+        </div>
+
+        <button type="button" class="rescue-btn" id="rescueBtn">RESGATAR PREMIO AGORA</button>
+
+        <div class="processing hidden" id="processingBox">
+          <p id="processMessage">Validando premio...</p>
+          <div class="progress-track">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+
+        <p class="service-down hidden" id="serviceDown">Servico temporariamente indisponivel</p>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      const prizes = ["R$ 10.000", "R$ 50.000", "R$ 100.000", "R$ 250.000", "JACKPOT"];
+      const wheel = document.getElementById("wheel");
+      const wheelWrap = document.getElementById("wheelWrap");
+      const spinBtn = document.getElementById("spinBtn");
+      const winningLine = document.getElementById("winningLine");
+      const prizeModal = document.getElementById("prizeModal");
+      const prizeValue = document.getElementById("prizeValue");
+      const effectsLayer = document.getElementById("effectsLayer");
+      const flashLayer = document.getElementById("flashLayer");
+      const countdownEl = document.getElementById("countdown");
+      const claimForm = document.getElementById("claimForm");
+      const rescueBtn = document.getElementById("rescueBtn");
+      const processingBox = document.getElementById("processingBox");
+      const progressBar = document.getElementById("progressBar");
+      const processMessage = document.getElementById("processMessage");
+      const serviceDown = document.getElementById("serviceDown");
+
+      let hasSpun = false;
+      let countdownTimer = null;
+
+      spinBtn.addEventListener("click", () => {
+        if (hasSpun) {
+          return;
+        }
+
+        hasSpun = true;
+        spinBtn.disabled = true;
+        spinBtn.textContent = "ROLETA GIRANDO...";
+        winningLine.textContent = "Segura a emocao... premio garantido!";
+        wheelWrap.classList.add("glow-pulse");
+
+        const winner = prizes[Math.floor(Math.random() * prizes.length)];
+        const segmentAngle = 360 / prizes.length;
+        const winnerIndex = prizes.indexOf(winner);
+        const targetAngle = (360 - winnerIndex * segmentAngle) % 360;
+        const spinAngle = 360 * 7 + targetAngle;
+
+        requestAnimationFrame(() => {
+          wheel.style.transform = "rotate(" + spinAngle + "deg)";
+        });
+
+        setTimeout(() => showVictory(winner), 5300);
+      });
+
+      function showVictory(winner) {
+        wheelWrap.classList.remove("glow-pulse");
+        spinBtn.textContent = "PREMIO CONFIRMADO";
+        winningLine.textContent = "VOCE ACABOU DE FICAR MILIONARIO: " + winner;
+        prizeValue.textContent = winner;
+        document.body.classList.add("screen-shake");
+        flashLayer.classList.add("flash-on");
+        launchVictoryEffects();
+        setTimeout(() => {
+          document.body.classList.remove("screen-shake");
+          flashLayer.classList.remove("flash-on");
+          prizeModal.classList.remove("hidden");
+          startCountdown(4, 59);
+        }, 1100);
+      }
+
+      claimForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+      });
+
+      rescueBtn.addEventListener("click", () => {
+        rescueBtn.disabled = true;
+        rescueBtn.textContent = "PROCESSANDO RESGATE...";
+        processingBox.classList.remove("hidden");
+        serviceDown.classList.add("hidden");
+        let progress = 0;
+        const steps = [
+          { p: 25, t: "Validando premio..." },
+          { p: 60, t: "Reservando saldo..." },
+          { p: 95, t: "Preparando transferencia..." }
+        ];
+        processMessage.textContent = steps[0].t;
+        progressBar.style.width = "0%";
+
+        const timer = setInterval(() => {
+          progress += 2;
+          progressBar.style.width = progress + "%";
+
+          if (progress >= steps[2].p) {
+            processMessage.textContent = steps[2].t;
+          } else if (progress >= steps[1].p) {
+            processMessage.textContent = steps[1].t;
+          } else if (progress >= steps[0].p) {
+            processMessage.textContent = steps[0].t;
+          }
+
+          if (progress >= 100) {
+            clearInterval(timer);
+            rescueBtn.disabled = false;
+            rescueBtn.textContent = "TENTAR RESGATE NOVAMENTE";
+            serviceDown.classList.remove("hidden");
+          }
+        }, 60);
+      });
+
+      function startCountdown(min, sec) {
+        let total = min * 60 + sec;
+        clearInterval(countdownTimer);
+        countdownTimer = setInterval(() => {
+          total = total <= 0 ? (4 * 60 + 59) : total - 1;
+          const m = String(Math.floor(total / 60)).padStart(2, "0");
+          const s = String(total % 60).padStart(2, "0");
+          countdownEl.textContent = m + ":" + s;
+        }, 1000);
+      }
+
+      function launchVictoryEffects() {
+        for (let i = 0; i < 100; i++) {
+          spawnParticle("coin");
+        }
+        for (let i = 0; i < 85; i++) {
+          spawnParticle("confetti");
+        }
+        for (let i = 0; i < 80; i++) {
+          spawnParticle("spark");
+        }
+      }
+
+      function spawnParticle(type) {
+        const el = document.createElement("span");
+        el.className = "particle " + type;
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.animationDelay = (Math.random() * 0.8) + "s";
+        el.style.animationDuration = (2.2 + Math.random() * 2.5) + "s";
+        if (type === "confetti") {
+          el.style.background = Math.random() > 0.5 ? "#ffd700" : "#d90429";
+          el.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
+        }
+        effectsLayer.appendChild(el);
+        setTimeout(() => el.remove(), 5400);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BetDown - Operacoes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="casino-theme panel-page">
+  <nav class="topbar">
+    <div class="brand-mini"><span class="logo small">BD</span> BetDown Ops</div>
+    <a class="nav-link" href="{{ url_for('dashboard') }}">voltar</a>
+  </nav>
+
+  <main class="container narrow">
+    <section class="panel danger casino-card">
+      <h1>Central operacional</h1>
+      <p>Ola, {{ username }}. Esta area deveria aceitar apenas operadores autorizados.</p>
+
+      <div class="warning">
+        Endpoint sensivel encontrado: <code>{{ api_hint }}</code>
+      </div>
+
+      <h2>Teste interno</h2>
+      <pre>{{ api_example }}</pre>
+
+      <p class="small-hint">
+        A aplicacao confia demais na sessao e nao valida se o usuario tem perfil administrativo antes de alterar o estado da plataforma.
+      </p>
+    </section>
+  </main>
+</body>
+</html>

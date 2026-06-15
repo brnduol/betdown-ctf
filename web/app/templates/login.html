@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BetDown - Acesso Interno</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-page casino-theme panel-page">
+  <main class="login-card casino-card">
+    <div class="brand">
+      <span class="logo">BD</span>
+      <div>
+        <h1>BetDown</h1>
+        <p>Área restrita da operação interna.</p>
+      </div>
+    </div>
+
+    {% if error %}
+      <div class="alert">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('login') }}">
+      <label for="username">Usuario</label>
+      <input id="username" name="username" type="text" autocomplete="username" placeholder="ex: operador01" required>
+
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="********" required>
+
+      <button type="submit">Entrar na plataforma</button>
+    </form>
+
+    <p class="small-hint">Ambiente de homologação. Monitoramento reduzido aos finais de semana.</p>
+  </main>
+</body>
+</html>
