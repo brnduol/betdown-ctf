@@ -3,6 +3,8 @@ import sqlite3
 
 from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, session, url_for
 
+import hashlib
+
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-betdown-ctf")
@@ -40,16 +42,80 @@ def init_db():
                 """,
                 [
                     (
-                        "player01",
-                        "123456",
+                        "fabio",
+                        hashlib.md5("bitch1".encode()).hexdigest(),
                         "user",
                         "R$ 250,00",
                         "Apostas recentes em futebol",
                         "sem observações",
                     ),
                     (
+                        "maria",
+                        hashlib.md5("fatima".encode()).hexdigest(),
+                        "user",
+                        "R$ 120,00",
+                        "Apostas recentes em basquete",
+                        "sem observações",
+                    ),
+                    (
+                        "matric",
+                        hashlib.md5("miamor".encode()).hexdigest(),
+                        "user",
+                        "R$ 300,00",
+                        "Apostas recentes em tênis",
+                        "sem observações",
+                    ),
+                    (
+                        "homeby",
+                        hashlib.md5("lover".encode()).hexdigest(),
+                        "user",
+                        "R$ 80,00",
+                        "Apostas recentes em vôlei",
+                        "sem observações",
+                    ),
+                    (
+                        "lulab",
+                        hashlib.md5("chris1".encode()).hexdigest(),
+                        "user",
+                        "R$ 500,00",
+                        "Apostas recentes em corrida",
+                        "sem observações",
+                    ),
+                    (
+                        "fabio",
+                        hashlib.md5("password".encode()).hexdigest(),
+                        "user",
+                        "R$ 45,00",
+                        "Apostas recentes em futebol",
+                        "sem observações",
+                    ),
+                    (
+                        "mateus",
+                        hashlib.md5("252525".encode()).hexdigest(),
+                        "user",
+                        "R$ 700,00",
+                        "Apostas recentes em e-sports",
+                        "sem observações",
+                    ),
+                    (
+                        "atenas",
+                        hashlib.md5("lalala".encode()).hexdigest(),
+                        "admin",
+                        "R$ 99999,00",
+                        "Acesso interno",
+                        "admin principal",
+                    ),
+                    (
+                        "matruza",
+                        hashlib.md5("eeyore".encode()).hexdigest(),
+                        "admin",
+                        "R$ 99999,00",
+                        "Acesso interno",
+                        "admin secundário",
+                    ),
+                    (
                         "junior.admin",
-                        "admin123",
+                        hashlib.md5("trocarsenhadepois123".encode()).hexdigest(),
                         "admin",
                         "R$ 99999,00",
                         "Acesso interno",
@@ -77,6 +143,7 @@ def login():
     if request.method == "POST":
         username = request.form.get("username", "")
         password = request.form.get("password", "")
+        password_hash = hashlib.md5(password.encode()).hexdigest()
 
         with get_db() as db:
             user = db.execute(
@@ -85,7 +152,7 @@ def login():
                 FROM users
                 WHERE username = ? AND password_hash = ? AND tipo = 'admin'
                 """,
-                (username, password),
+                (username, password_hash),
             ).fetchone()
 
         if user:

@@ -1,4 +1,0 @@
-TODO:
-- Remover credenciais temporárias antes de publicar.
-- Revisar endpoint /api/dashboard, ele ainda aceita a lista de colunas pelo cliente.
-- Conta interna usada nos testes: junior.admin / admin123.

@@ -1,0 +1,5 @@
+TODO:
+- Remover credenciais temporárias antes de publicar.
+- Revisar endpoint /api/dashboard, ele ainda aceita a lista de colunas pelo cliente.
+- Conta interna usada nos testes: junior.admin / trocarsenhadepois123.
+- não esqueça de verificar a implementação da tabela, o consultor falou para usarmos a coluna de password_hash para deixar o sistema mais seguro
