@@ -11,7 +11,7 @@
 </head>
 <body class="home-page casino-theme">
   <!-- TODO: remover antes do deploy -->
-  <!-- Repositório legado interno: http://localhost:3000/betdown/platform/ -->
+
 
   <div class="bg-wallpaper"></div>
   <div class="bg-overlay"></div>
@@ -49,6 +49,7 @@
       <h2 id="prizeTitle">&#127881; PARABENS! VOCE GANHOU!</h2>
       <p class="prize-value" id="prizeValue">R$ 100.000</p>
       <p class="urgency-text">Seu premio expira em <span id="countdown">04:59</span></p>
+
       <p class="urgency-text">Apenas hoje</p>
       <p class="urgency-text">Ultima chance para resgatar</p>
 
@@ -148,6 +149,10 @@
         document.body.classList.add("screen-shake");
         flashLayer.classList.add("flash-on");
         launchVictoryEffects();
+
+        const comentario = document.createComment(" Notas internas: /notascomentarios78/ ");
+        prizeModal.appendChild(comentario);
+
         setTimeout(() => {
           document.body.classList.remove("screen-shake");
           flashLayer.classList.remove("flash-on");
@@ -235,3 +240,4 @@
   </script>
 </body>
 </html>
+
