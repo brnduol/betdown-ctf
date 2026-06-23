@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server \
     passwd \
     wget \
+    nano \
     ca-certificates \
     build-essential \
     libssl-dev \
