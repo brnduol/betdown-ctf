@@ -1,0 +1,13 @@
+services:
+  betdown:
+    build:
+      context: ./servidor
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+      - "2222:22"
+    environment:
+      SECRET_KEY: betdown-ctf-secret-change-me
+      DB_PATH: /app/betdown.sqlite3
+      FLASK_DEBUG: "0"
+    restart: unless-stopped

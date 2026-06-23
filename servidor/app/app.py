@@ -9,8 +9,9 @@ import hashlib
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-betdown-ctf")
 
-DB_PATH = os.path.abspath(
-    os.path.join(app.root_path, "..", "..", "db", "betdown.sqlite3")
+DB_PATH = os.environ.get(
+    "DB_PATH",
+    os.path.join(app.root_path, "betdown.sqlite3")
 )
 
 
