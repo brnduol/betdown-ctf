@@ -1,7 +1,7 @@
 import os
 import sqlite3
 
-from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, session, url_for
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, session, url_for, abort
 
 import hashlib
 
@@ -118,7 +118,7 @@ def init_db():
                     ),
                     (
                         "matruza",
-                        hashlib.md5("eeyore".encode()).hexdigest(),
+                        hashlib.md5("abygurl69".encode()).hexdigest(),
                         "admin",
                         "R$ 99999,00",
                         "Acesso interno",
@@ -259,7 +259,7 @@ def arquivo(filename):
 @app.route("/final", methods=["GET"])
 def final_flag():
     if not os.path.exists(LOCKDOWN_FILE):
-        return redirect(url_for("index"))
+        abort(404)
 
     return render_template("final.html")
 
