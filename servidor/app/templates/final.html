@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BetDown — Serviço de Contingência</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #090909;
+            color: #e8e8e8;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .terminal {
+            width: min(860px, 92vw);
+            border: 1px solid #a31616;
+            background: #111;
+            box-shadow: 0 0 30px rgba(163, 22, 22, 0.25);
+        }
+
+        .terminal-header {
+            padding: 12px 18px;
+            background: #1b0000;
+            border-bottom: 1px solid #a31616;
+            color: #ff6b6b;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .terminal-body {
+            padding: 32px;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #ff4d4d;
+            font-size: 1.7rem;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #d0d0d0;
+        }
+
+        .status {
+            margin: 24px 0;
+            padding: 16px;
+            border-left: 4px solid #ff4d4d;
+            background: #1a0808;
+            font-family: monospace;
+        }
+
+        .flag {
+            margin-top: 28px;
+            padding: 18px;
+            text-align: center;
+            border: 1px dashed #43d17d;
+            background: #07130c;
+            color: #62e89b;
+            font-family: monospace;
+            font-size: 1.1rem;
+            word-break: break-word;
+        }
+
+        .footer {
+            margin-top: 28px;
+            color: #777;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <main class="terminal">
+        <div class="terminal-header">
+            betdown-emergency-gateway :: recovery-mode
+        </div>
+
+        <section class="terminal-body">
+            <h1>Serviço de contingência ativo</h1>
+
+            <p>
+                A infraestrutura principal da BetDown foi encerrada após um
+                incidente crítico de segurança.
+            </p>
+
+            <div class="status">
+                [OFFLINE] Autenticação<br>
+                [OFFLINE] Dashboard administrativo<br>
+                [OFFLINE] API interna<br>
+                [OFFLINE] Plataforma de apostas<br>
+                [ONLINE] Endpoint de contingência
+            </div>
+
+            <p>
+                A casa nem sempre vence...
+            </p>
+
+            <div class="flag">
+                flag{a_casa_caiu}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

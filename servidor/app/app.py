@@ -1,7 +1,7 @@
 import os
 import sqlite3
 
-from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, session, url_for
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, session, url_for, abort
 
 import hashlib
 
@@ -9,17 +9,25 @@ import hashlib
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-betdown-ctf")
 
-DB_PATH = os.environ.get(
-    "DB_PATH",
-    os.path.join(app.root_path, "betdown.sqlite3")
-)
+DB_PATH = os.environ.get("DB_PATH", os.path.join(app.root_path, "betdown.sqlite3"))
 
+LOCKDOWN_FILE = "/var/lib/betdown/lockdown"
 
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.before_request
+def emergency_lockdown():
+    """
+    Quando o script root.sh é executado, ele cria um marcador em
+    /var/lib/betdown/lockdown. A aplicação entra em modo de contingência
+    e redireciona todos os endpoints para a página final.
+    """
+    if os.path.exists(LOCKDOWN_FILE):
+        if request.endpoint != "final_flag":
+            return redirect(url_for("final_flag"))
 
 def init_db():
     with get_db() as db:
@@ -110,7 +118,7 @@ def init_db():
                     ),
                     (
                         "matruza",
-                        hashlib.md5("eeyore".encode()).hexdigest(),
+                        hashlib.md5("abygurl69".encode()).hexdigest(),
                         "admin",
                         "R$ 99999,00",
                         "Acesso interno",
@@ -247,8 +255,18 @@ def arquivo(filename):
     diretorio = os.path.join(app.root_path, "arquivos")
     return send_from_directory(diretorio, filename)
 
+
+@app.route("/final", methods=["GET"])
+def final_flag():
+    if not os.path.exists(LOCKDOWN_FILE):
+        abort(404)
+
+    return render_template("final.html")
+
+
 init_db()
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    debug = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(host="0.0.0.0", port=5000, debug=debug)

@@ -34,49 +34,11 @@ RUN echo 'flag{bem_vindo_matruza}' > /home/matruza/user.txt \
     && chown matruza:matruza /home/matruza/user.txt \
     && chmod 644 /home/matruza/user.txt
 
-RUN printf '%s\n' \
-'#!/bin/bash' \
-'set -e' \
-'' \
-'cat > /app/templates/home.html <<'"'"'HTML'"'"'' \
-'<!doctype html>' \
-'<html lang="pt-br">' \
-'<head>' \
-'  <meta charset="utf-8">' \
-'  <meta http-equiv="refresh" content="2">' \
-'  <title>A casa caiu</title>' \
-'</head>' \
-'<body style="background:#050304;color:#ffd700;font-family:Arial;text-align:center;padding-top:20vh;">' \
-'  <h1>A casa caiu! kkkk</h1>' \
-'  <h2>flag{fim_de_jogo}</h2>' \
-'</body>' \
-'</html>' \
-'HTML' \
-'' \
-'for page in login.html dashboard.html shutdown.html; do' \
-'cat > /app/templates/$page <<'"'"'HTML'"'"'' \
-'<!doctype html>' \
-'<html lang="pt-br">' \
-'<head>' \
-'  <meta charset="utf-8">' \
-'  <meta http-equiv="refresh" content="0; url=/">' \
-'  <title>Redirecionando</title>' \
-'</head>' \
-'<body>' \
-'  <script>window.location.href = "/";</script>' \
-'</body>' \
-'</html>' \
-'HTML' \
-'done' \
-'echo ""' \
-'echo "A casa caiu! kkkk"' \
-'echo "Acesse a página web para ver o resultado:"' \
-'echo "http://localhost:5000"' \
-'echo ""' \
-> /root/root.sh \
-    && chmod 700 /root/root.sh
+RUN mkdir -p /var/lib/betdown \
+    && chown root:root /var/lib/betdown \
+    && chmod 755 /var/lib/betdown
 
-RUN mkdir -p /run/sshd \
+RUN mkdir -p /var/run/sshd \
     && ssh-keygen -A \
     && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config \
     && sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config \
@@ -90,6 +52,16 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ /app/
+
+RUN chown -R root:root /app \
+    && find /app -type d -exec chmod 750 {} \; \
+    && find /app -type f -exec chmod 640 {} \;
+
+COPY root.sh /root/root.sh
+
+RUN sed -i 's/\r$//' /root/root.sh \
+    && chown root:root /root/root.sh \
+    && chmod 700 /root/root.sh
 
 COPY entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
