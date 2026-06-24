@@ -33,8 +33,9 @@ RUN echo 'flag{welcome_matruza}' > /home/matruza/user.txt \
     && chown matruza:matruza /home/matruza/user.txt \
     && chmod 644 /home/matruza/user.txt
 
-RUN echo 'flag{sudo_chroot_root}' > /root/root.txt \
-    && chmod 600 /root/root.txt
+RUN mkdir -p /var/lib/betdown \
+    && chown root:root /var/lib/betdown \
+    && chmod 755 /var/lib/betdown
 
 RUN mkdir -p /var/run/sshd \
     && ssh-keygen -A \
@@ -50,6 +51,13 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ /app/
+
+COPY root.sh /root/root.sh
+
+RUN sed -i 's/\r$//' /root/root.sh \
+    && chown root:root /root/root.sh \
+    && chmod 700 /root/root.sh
+    
 COPY ssh/notes/ /app/notes/
 
 COPY entrypoint.sh /entrypoint.sh
