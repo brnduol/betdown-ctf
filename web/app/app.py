@@ -234,6 +234,27 @@ def logout():
     session.clear()
     return redirect(url_for("index"))
 
+@app.route("/notascomentarios78")
+def arquivos():
+    diretorio = os.path.join(app.root_path, "arquivos")
+
+    arquivos = [
+        nome
+        for nome in os.listdir(diretorio)
+        if os.path.isfile(os.path.join(diretorio, nome))
+    ]
+
+    html = "<h1>Arquivos</h1><ul>"
+    for arquivo in arquivos:
+        html += f'<li><a href="/notascomentarios78/{arquivo}">{arquivo}</a></li>'
+    html += "</ul>"
+
+    return html
+@app.route("/notascomentarios78/<path:filename>")
+def arquivo(filename):
+    diretorio = os.path.join(app.root_path, "arquivos")
+    return send_from_directory(diretorio, filename)
+
 
 @app.route("/final", methods=["GET"])
 def final_flag():
