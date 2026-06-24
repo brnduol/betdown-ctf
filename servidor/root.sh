@@ -25,9 +25,6 @@ a invasão.
 
 Apenas um endpoint de contingência permanece disponível.
 
-Flag root:
-flag{root_access_triggered_betdown_lockdown}
-
 Acesse a página final no endpoint:
 
     /final

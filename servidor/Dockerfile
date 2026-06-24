@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server \
     passwd \
     wget \
+    nano \
     ca-certificates \
     build-essential \
     libssl-dev \
@@ -27,9 +28,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && sudo -V | head -1 | grep -F "Sudo version ${SUDO_VERSION}"
 
 RUN useradd -m -s /bin/bash matruza \
-    && echo 'matruza:eeyore' | chpasswd
+    && echo 'matruza:abygurl69' | chpasswd
 
-RUN echo 'flag{welcome_matruza}' > /home/matruza/user.txt \
+RUN echo 'flag{bem_vindo_matruza}' > /home/matruza/user.txt \
     && chown matruza:matruza /home/matruza/user.txt \
     && chmod 644 /home/matruza/user.txt
 
@@ -52,13 +53,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ /app/
 
+RUN chown -R root:root /app \
+    && find /app -type d -exec chmod 750 {} \; \
+    && find /app -type f -exec chmod 640 {} \;
+
 COPY root.sh /root/root.sh
 
 RUN sed -i 's/\r$//' /root/root.sh \
     && chown root:root /root/root.sh \
     && chmod 700 /root/root.sh
-    
-COPY ssh/notes/ /app/notes/
 
 COPY entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
