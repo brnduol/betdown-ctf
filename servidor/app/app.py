@@ -118,7 +118,7 @@ def init_db():
                     ),
                     (
                         "matruza",
-                        hashlib.md5("abygurl69".encode()).hexdigest(),
+                        hashlib.md5("00000000000bloodyboy".encode()).hexdigest(),
                         "admin",
                         "R$ 99999,00",
                         "Acesso interno",

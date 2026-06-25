@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && sudo -V | head -1 | grep -F "Sudo version ${SUDO_VERSION}"
 
 RUN useradd -m -s /bin/bash matruza \
-    && echo 'matruza:abygurl69' | chpasswd
+    && echo 'matruza:00000000000bloodyboy' | chpasswd
 
 RUN echo 'flag{bem_vindo_matruza}' > /home/matruza/user.txt \
     && chown matruza:matruza /home/matruza/user.txt \
