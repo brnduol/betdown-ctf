@@ -11,7 +11,7 @@ Você está preparado para essa missão?
 
 ---
 # Como Rodar o Projeto
-* Tenha **Docker** e **Docker Compose** instalados para que consiga subir a imagem.
+- Tenha **Docker** e **Docker Compose** instalados para que consiga subir a imagem.
 - Faça o clone ou baixe a pasta deste repositório para a sua máquina. 
 - Abra o terminal e navegue até a raiz do projeto (onde está o arquivo `docker-compose.yml`). 
 - Execute o comando abaixo para construir a imagem e subir a infraestrutura em segundo plano: 
