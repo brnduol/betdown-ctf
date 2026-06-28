@@ -1,7 +1,7 @@
-# Betdown CTF 🎰
+# BetDown CTF 🎰
 Você é um agente autônomo contratado por uma organização secreta benevolente para invadir um sistema de apostas ilegal com histórico de bloqueio de saques e falsas notificações de recebimento de recompensas, além de coleta informações de cartões de crédito das vítimas.
 
-A alvo é a casa de apostas **Betdown**, que andou fazendo muito sucesso em popups de anúncios pela internet por conta das promessas exorbitantes de ganhos fáceis e saques rápidos. Em menos de 2 meses eles já fizeram milhões de vítimas pelo país.
+A alvo é a casa de apostas **BetDown**, que andou fazendo muito sucesso em popups de anúncios pela internet por conta das promessas exorbitantes de ganhos fáceis e saques rápidos. Em menos de 2 meses eles já fizeram milhões de vítimas pelo país.
 
 A sua missão é invadir o sistema e conseguir informações importantes para que os criminosos possam ser identificados e a busca possa prosseguir. A organização te prometeu o dobro do pagamento caso consiga tirar o sistema do ar para evitar que mais pessoas acabem perdendo dinheiro.
 
